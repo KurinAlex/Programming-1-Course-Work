@@ -1,7 +1,7 @@
 #pragma once
 
 template <typename T>
-void swap(T* a, T* b)
+void my_swap(T* a, T* b)
 {
 	T temp = *a;
 	*a = *b;
@@ -13,7 +13,7 @@ void swap_if_greater(T* a, T* b)
 {
 	if (*a > * b)
 	{
-		swap(a, b);
+		my_swap(a, b);
 	}
 }
 
@@ -29,7 +29,7 @@ T* partition(T* first, T* last)
 	swap_if_greater(middle, right);
 
 	T pivot = *middle;
-	swap(middle, --right);
+	my_swap(middle, --right);
 
 	while (left < right)
 	{
@@ -39,9 +39,9 @@ T* partition(T* first, T* last)
 		{
 			break;
 		}
-		swap(left, right);
+		my_swap(left, right);
 	}
-	swap(left, last - 2);
+	my_swap(left, last - 2);
 	return left;
 }
 
@@ -94,7 +94,7 @@ void merge_sort(T* first, T* last)
 	}
 }
 
-template<typename T>
+template <typename T>
 void down_heap(int left, int n, T* first)
 {
 	T d = *(first + left - 1);
@@ -117,7 +117,7 @@ void down_heap(int left, int n, T* first)
 	*(first + left - 1) = d;
 }
 
-template<typename T>
+template <typename T>
 void heap_sort(T* first, T* last)
 {
 	int n = last - first;
@@ -128,7 +128,7 @@ void heap_sort(T* first, T* last)
 	}
 	for (int left = n; left > 1; --left)
 	{
-		swap(first, first + left - 1);
+		my_swap(first, first + left - 1);
 		down_heap(1, left - 1, first);
 	}
 }

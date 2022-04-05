@@ -1,11 +1,6 @@
 #pragma once
 
-#include <algorithm>
-#include <chrono>
-#include <random>
-#include <string>
-
-#include "sort.h"
+#include "plot.h"
 
 namespace Programming1CourseWork
 {
@@ -48,11 +43,6 @@ namespace Programming1CourseWork
 		{
 			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
 			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series3 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series4 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series5 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->chart = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->buttonPlot = (gcnew System::Windows::Forms::Button());
 			this->textBoxSizeMin = (gcnew System::Windows::Forms::TextBox());
@@ -76,31 +66,6 @@ namespace Programming1CourseWork
 			this->chart->Legends->Add(legend1);
 			this->chart->Location = System::Drawing::Point(0, 0);
 			this->chart->Name = L"chart";
-			series1->ChartArea = L"chart_area";
-			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
-			series1->Legend = L"legend";
-			series1->Name = L"quick_sort";
-			series2->ChartArea = L"chart_area";
-			series2->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
-			series2->Legend = L"legend";
-			series2->Name = L"merge_sort";
-			series3->ChartArea = L"chart_area";
-			series3->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
-			series3->Legend = L"legend";
-			series3->Name = L"heap_sort";
-			series4->ChartArea = L"chart_area";
-			series4->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
-			series4->Legend = L"legend";
-			series4->Name = L"std::sort";
-			series5->ChartArea = L"chart_area";
-			series5->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
-			series5->Legend = L"legend";
-			series5->Name = L"asymptote";
-			this->chart->Series->Add(series1);
-			this->chart->Series->Add(series2);
-			this->chart->Series->Add(series3);
-			this->chart->Series->Add(series4);
-			this->chart->Series->Add(series5);
 			this->chart->Size = System::Drawing::Size(780, 550);
 			this->chart->TabIndex = 0;
 			this->chart->Text = L"chart";
@@ -208,95 +173,66 @@ namespace Programming1CourseWork
 		}
 #pragma endregion
 
-		const int max_points = 500;
-
-		System::Void clear_chart()
-		{
-			for each (auto series in chart->Series)
-			{
-				series->Points->Clear();
-			}
-		}
-
 		System::String^ to_system(std::string s)
 		{
 			return gcnew System::String(s.c_str());
 		}
 
+		System::Void add_series(std::string name, series source)
+		{
+			auto series = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+
+			series->ChartArea = L"chart_area";
+			series->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
+			series->Legend = L"legend";
+			series->Name = to_system(name);
+			for (point point : source)
+			{
+				series->Points->AddXY(point.x, point.y);
+			}
+
+			chart->Series->Add(series);
+		}
+
+		System::Void plot_data(series_collection series_collection)
+		{
+			for (auto series : series_collection)
+			{
+				add_series(series.first, series.second);
+			}
+		}
+
+		System::Void clear_chart()
+		{
+			chart->Series->Clear();
+		}
+
 		System::Void buttonPlot_Click(System::Object^ sender, System::EventArgs^ e)
 		{
-			clear_chart();
-
-			int size_min;
-			int size_max;
-			int min_value;
-			int max_value;
-
-			if (!System::Int32::TryParse(textBoxSizeMin->Text, size_min) ||
-				!System::Int32::TryParse(textBoxSizeMax->Text, size_max) ||
-				size_min <= 0 || size_max <= 0 || size_min > size_max ||
-				!System::Int32::TryParse(textBoxMinValue->Text, min_value) ||
-				!System::Int32::TryParse(textBoxMaxValue->Text, max_value) ||
-				min_value > max_value)
+			try
 			{
-				System::Windows::Forms::MessageBox::Show("Wrong input", "Error");
-				return;
-			}
+				clear_chart();
 
-			double size_stride = double(size_max - size_min) / max_points;
-			if (size_stride < 1.0)
-			{
-				size_stride = 1.0;
-			}
+				int size_min;
+				int size_max;
+				int min_value;
+				int max_value;
 
-			std::random_device rd;
-			std::mt19937 random_engine(rd());
-			std::uniform_int_distribution<int> random_generator(min_value, max_value);
-
-			const double asymptote_scale = 0.8 / log2(size_max);
-
-			std::pair<std::string, void(*) (int*, int*)> sorts[]
-			{
-				{"quick_sort", quick_sort},
-				{"merge_sort", merge_sort},
-				{"heap_sort", heap_sort},
-				{"std::sort", std::sort},
-			};
-
-			for (double s = size_min; s <= size_max; s += size_stride)
-			{
-				int size = round(s);
-
-				int* random_array = new int[size];
-				int* sort_array = new int[size];
-
-				for (int i = 0; i < size; i++)
+				if (!System::Int32::TryParse(textBoxSizeMin->Text, size_min) ||
+					!System::Int32::TryParse(textBoxSizeMax->Text, size_max) ||
+					size_min <= 0 || size_max <= 0 || size_min > size_max ||
+					!System::Int32::TryParse(textBoxMinValue->Text, min_value) ||
+					!System::Int32::TryParse(textBoxMaxValue->Text, max_value) ||
+					min_value > max_value)
 				{
-					random_array[i] = random_generator(random_engine);
+					throw std::exception("Wrong input");
 				}
 
-				for (auto sort : sorts)
-				{
-					std::copy(random_array, random_array + size, sort_array);
-
-					auto start = std::chrono::steady_clock::now();
-					sort.second(sort_array, sort_array + size);
-					auto end = std::chrono::steady_clock::now();
-
-					if (!std::is_sorted(sort_array, sort_array + size))
-					{
-						System::Windows::Forms::MessageBox::Show("Array is not sorted", "Error");
-						return;
-					}
-
-					chart->Series[to_system(sort.first)]->Points->AddXY(
-						size, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
-				}
-
-				chart->Series["asymptote"]->Points->AddXY(size, asymptote_scale * size * log2(size));
-
-				delete[] random_array;
-				delete[] sort_array;
+				plot_data(get_plot(size_min, size_max, min_value, max_value));
+			}
+			catch(std::exception ex)
+			{
+				System::Windows::Forms::MessageBox::Show(to_system(ex.what()), "Error");
 			}
 		}
 	};
