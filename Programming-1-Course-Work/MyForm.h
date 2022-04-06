@@ -211,8 +211,6 @@ namespace Programming1CourseWork
 		{
 			try
 			{
-				clear_chart();
-
 				int size_min;
 				int size_max;
 				int min_value;
@@ -228,6 +226,7 @@ namespace Programming1CourseWork
 					throw std::exception("Wrong input");
 				}
 
+				clear_chart();
 				plot_data(get_plot(size_min, size_max, min_value, max_value));
 			}
 			catch (std::exception ex)

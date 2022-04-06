@@ -2,7 +2,10 @@
 #include <random>
 
 #include "point.h"
-#include "sorter.h"
+#include "quick_sorter.h"
+#include "merge_sorter.h"
+#include "heap_sorter.h"
+#include "std_sorter.h"
 
 const std::string asymptote_name = "asymptote";
 const int max_points = 500;
