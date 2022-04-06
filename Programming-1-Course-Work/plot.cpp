@@ -1,20 +1,18 @@
-#include <algorithm>
 #include <chrono>
 #include <random>
 
 #include "point.h"
-#include "sort.h"
 #include "sorter.h"
 
 const std::string asymptote_name = "asymptote";
 const int max_points = 500;
 
-sorter sorters[]
+sorter* sorters[]
 {
-	{"quick_sort", quick_sort},
-	{"merge_sort", merge_sort},
-	{"heap_sort", heap_sort},
-	{"std::sort", std::sort},
+	new quick_sorter(),
+	new merge_sorter(),
+	new heap_sorter(),
+	new std_sorter()
 };
 
 double asymptote(int x)
@@ -25,9 +23,9 @@ double asymptote(int x)
 series_collection get_plot(int size_min, int size_max, int min_value, int max_value)
 {
 	series_collection series_collection;
-	for (sorter sorter : sorters)
+	for (sorter* sorter : sorters)
 	{
-		series_collection.insert({ sorter.name, series() });
+		series_collection.insert({ sorter->get_name(), series() });
 	}
 	series_collection.insert({ asymptote_name, series() });
 
@@ -55,21 +53,21 @@ series_collection get_plot(int size_min, int size_max, int min_value, int max_va
 			random_array[i] = random_generator(random_engine);
 		}
 
-		for (auto sorter : sorters)
+		for (sorter* sorter : sorters)
 		{
 			std::copy(random_array, random_array + size, sort_array);
 
 			auto start = std::chrono::steady_clock::now();
-			sorter.sort(sort_array, sort_array + size);
+			sorter->sort(sort_array, sort_array + size);
 			auto end = std::chrono::steady_clock::now();
+			long long duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
 			if (!std::is_sorted(sort_array, sort_array + size))
 			{
 				throw std::exception("Array is not sorted");
 			}
 
-			series_collection[sorter.name].push_back(
-				{ size, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() });
+			series_collection[sorter->get_name()].push_back({ size, duration });
 		}
 
 		series_collection[asymptote_name].push_back({ size, (long long)(asymptote_scale * asymptote(size)) });

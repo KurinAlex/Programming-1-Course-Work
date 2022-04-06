@@ -230,7 +230,7 @@ namespace Programming1CourseWork
 
 				plot_data(get_plot(size_min, size_max, min_value, max_value));
 			}
-			catch(std::exception ex)
+			catch (std::exception ex)
 			{
 				System::Windows::Forms::MessageBox::Show(to_system(ex.what()), "Error");
 			}
