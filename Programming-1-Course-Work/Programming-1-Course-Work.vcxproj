@@ -123,17 +123,17 @@
     <ClCompile Include="plot.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="heap_sorter.h" />
-    <ClInclude Include="merge_sorter.h" />
+    <ClInclude Include="CHeapSorter.h" />
+    <ClInclude Include="CMergeSorter.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="plot.h" />
     <ClInclude Include="point.h" />
-    <ClInclude Include="quick_sorter.h" />
+    <ClInclude Include="CQuickSorter.h" />
     <ClInclude Include="sort.h" />
-    <ClInclude Include="sorter.h" />
-    <ClInclude Include="std_sorter.h" />
+    <ClInclude Include="CSorter.h" />
+    <ClInclude Include="CStdSorter.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">

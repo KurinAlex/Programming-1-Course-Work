@@ -35,19 +35,19 @@
     <ClInclude Include="point.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="sorter.h">
+    <ClInclude Include="CHeapSorter.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="quick_sorter.h">
+    <ClInclude Include="CMergeSorter.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="merge_sorter.h">
+    <ClInclude Include="CQuickSorter.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="heap_sorter.h">
+    <ClInclude Include="CSorter.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="std_sorter.h">
+    <ClInclude Include="CStdSorter.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,13 +2,13 @@
 
 #include <algorithm>
 
-#include "sorter.h"
+#include "CSorter.h"
 #include "sort.h"
 
-class std_sorter : public sorter
+class CStdSorter : public CSorter
 {
 public:
-	std_sorter() : sorter("std::sort")
+	CStdSorter() : CSorter("std::sort")
 	{
 	}
 

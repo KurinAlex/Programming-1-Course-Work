@@ -2,20 +2,20 @@
 #include <random>
 
 #include "point.h"
-#include "quick_sorter.h"
-#include "merge_sorter.h"
-#include "heap_sorter.h"
-#include "std_sorter.h"
+#include "CQuickSorter.h"
+#include "CMergeSorter.h"
+#include "CHeapSorter.h"
+#include "CStdSorter.h"
 
 const std::string asymptote_name = "asymptote";
 const int max_points = 500;
 
-sorter* sorters[]
+CSorter* sorters[]
 {
-	new quick_sorter(),
-	new merge_sorter(),
-	new heap_sorter(),
-	new std_sorter()
+	new CQuickSorter(),
+	new CMergeSorter(),
+	new CHeapSorter(),
+	new CStdSorter()
 };
 
 double asymptote(int x)
@@ -26,7 +26,7 @@ double asymptote(int x)
 series_collection get_plot(int size_min, int size_max, int min_value, int max_value)
 {
 	series_collection series_collection;
-	for (sorter* sorter : sorters)
+	for (CSorter* sorter : sorters)
 	{
 		series_collection.insert({ sorter->get_name(), series() });
 	}
@@ -56,7 +56,7 @@ series_collection get_plot(int size_min, int size_max, int min_value, int max_va
 			random_array[i] = random_generator(random_engine);
 		}
 
-		for (sorter* sorter : sorters)
+		for (CSorter* sorter : sorters)
 		{
 			std::copy(random_array, random_array + size, sort_array);
 

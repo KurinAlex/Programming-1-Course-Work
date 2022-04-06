@@ -2,13 +2,13 @@
 
 #include <string>
 
-class sorter
+class CSorter
 {
-protected:
+private:
 	std::string m_name;
 
 public:
-	sorter(std::string name) : m_name(name)
+	CSorter(std::string name) : m_name(name)
 	{
 	}
 

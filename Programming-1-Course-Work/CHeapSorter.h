@@ -1,12 +1,12 @@
 #pragma once
 
-#include "sorter.h"
+#include "CSorter.h"
 #include "sort.h"
 
-class heap_sorter : public sorter
+class CHeapSorter : public CSorter
 {
 public:
-	heap_sorter() : sorter("heap_sort")
+	CHeapSorter() : CSorter("heap_sort")
 	{
 	}
 

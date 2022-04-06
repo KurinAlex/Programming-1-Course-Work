@@ -1,12 +1,12 @@
 #pragma once
 
-#include "sorter.h"
+#include "CSorter.h"
 #include "sort.h"
 
-class quick_sorter : public sorter
+class CQuickSorter : public CSorter
 {
 public:
-	quick_sorter() : sorter("quick_sort")
+	CQuickSorter() : CSorter("quick_sort")
 	{
 	}
 
